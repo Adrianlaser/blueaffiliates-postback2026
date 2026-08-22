@@ -1,0 +1,16 @@
+{
+  "name": "blueaffiliates-postback",
+  "version": "1.0.0",
+  "description": "BlueAffiliates S2S postback endpoint with Postgres storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
