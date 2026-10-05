@@ -86,8 +86,8 @@
   @media(max-width:720px){.stats{grid-template-columns:1fr}}
 
   /* Formules */
-  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:30px}
-  .plan{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s}
+  .plans{display:grid;grid-template-columns:minmax(0,440px);justify-content:center;gap:18px;margin-top:30px}
+  .plan{text-align:left;position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s}
   .plan:hover{transform:translateY(-6px)}
   .plan.sel{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 20px 60px #22d3ee22}
   .plan .tag{position:absolute;top:-12px;right:20px;background:var(--grad);font-size:11px;font-weight:700;padding:5px 12px;border-radius:99px}
@@ -156,9 +156,9 @@
 
   <section id="catalogue" style="padding-top:0"></section>
 
-  <section id="formules">
-    <h2 class="rv">Choisissez votre formule</h2>
-    <p class="muted rv">Sans engagement. Résiliable à tout moment.</p>
+  <section id="formules" style="text-align:center">
+    <h2 class="rv">Une seule offre, tout inclus</h2>
+    <p class="muted rv">Un an d'accès complet, payé une seule fois.</p>
     <div class="plans" id="plans"></div>
   </section>
 
@@ -202,10 +202,7 @@ const CONFIG = {
   whatsapp: "33600000000",          // numéro fictif
   phoneDisplay: "06 00 00 00 00",
   plans: [
-    { id:"ess", name:"Essentiel", price:"4,99", features:["HD 1080p","1 écran","Catalogue complet"] },
-    { id:"std", name:"Standard",  price:"8,99", features:["Full HD","2 écrans","Téléchargements"], tag:"Populaire" },
-    { id:"pre", name:"Premium",   price:"12,99", features:["4K HDR","4 écrans","Son spatial","Avant-premières"] },
-    { id:"an",  name:"12 mois",   price:"99", unit:"an", features:["Tout Premium inclus","4K HDR · 4 écrans","Payé une fois par an","Soit 8,25 €/mois"], tag:"−36 %" }
+    { id:"an",  name:"Abonnement 12 mois", price:"99", unit:"an", features:["Catalogue complet","4K HDR","4 écrans simultanés","Téléchargements hors ligne","Soit 8,25 €/mois"], tag:"Offre unique" }
   ]
 };
 const FEATURED = [
@@ -250,7 +247,7 @@ $("#catalogue").innerHTML = ROWS.map(r=>`
 document.querySelectorAll(".play").forEach(el=>el.addEventListener("click",e=>{e.preventDefault();toast("Démo : aucun contenu réel n'est disponible.");}));
 
 // Formules + commande
-let selPlan = CONFIG.plans[1], selPay = "Carte";
+let selPlan = CONFIG.plans[0], selPay = "Carte";
 $("#plans").innerHTML = CONFIG.plans.map(p=>`
   <div class="plan rv" data-id="${p.id}">
     ${p.tag?`<span class="tag">${p.tag}</span>`:""}
