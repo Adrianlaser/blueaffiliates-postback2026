@@ -92,7 +92,7 @@
   .plan.sel{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 20px 60px #22d3ee22}
   .plan .tag{position:absolute;top:-12px;right:20px;background:var(--grad);font-size:11px;font-weight:700;padding:5px 12px;border-radius:99px}
   .plan h3{font-size:13px;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase}
-  .plan .price{font-size:48px;font-weight:900;margin:10px 0}
+  .plan .price{font-size:clamp(36px,3.6vw,48px);font-weight:900;margin:10px 0;white-space:nowrap}
   .plan .price small{font-size:16px;color:var(--mut)}
   .plan ul{list-style:none;font-size:14px;color:var(--mut)}
   .plan li{padding:6px 0;border-bottom:1px dashed var(--line)}
@@ -186,7 +186,7 @@
         <p class="eyebrow">Récapitulatif</p>
         <div class="r"><span>Formule</span><b id="sPlan"></b></div>
         <div class="r"><span>Paiement</span><b id="sPay"></b></div>
-        <div class="r" style="border:0;align-items:center"><span>Total / mois</span><span class="tot" id="sTot"></span></div>
+        <div class="r" style="border:0;align-items:center"><span>Total</span><span class="tot" id="sTot"></span></div>
         <p class="muted" style="font-size:13px;margin-top:14px">Contact (fictif) : <b id="phone"></b></p>
       </div>
     </div>
@@ -204,7 +204,8 @@ const CONFIG = {
   plans: [
     { id:"ess", name:"Essentiel", price:"4,99", features:["HD 1080p","1 écran","Catalogue complet"] },
     { id:"std", name:"Standard",  price:"8,99", features:["Full HD","2 écrans","Téléchargements"], tag:"Populaire" },
-    { id:"pre", name:"Premium",   price:"12,99", features:["4K HDR","4 écrans","Son spatial","Avant-premières"] }
+    { id:"pre", name:"Premium",   price:"12,99", features:["4K HDR","4 écrans","Son spatial","Avant-premières"] },
+    { id:"an",  name:"12 mois",   price:"99", unit:"an", features:["Tout Premium inclus","4K HDR · 4 écrans","Payé une fois par an","Soit 8,25 €/mois"], tag:"−36 %" }
   ]
 };
 const FEATURED = [
@@ -254,19 +255,19 @@ $("#plans").innerHTML = CONFIG.plans.map(p=>`
   <div class="plan rv" data-id="${p.id}">
     ${p.tag?`<span class="tag">${p.tag}</span>`:""}
     <h3>${p.name}</h3>
-    <div class="price">${p.price}<small> €/mois</small></div>
+    <div class="price">${p.price}<small> €/${p.unit||"mois"}</small></div>
     <ul>${p.features.map(f=>`<li>${f}</li>`).join("")}</ul>
   </div>`).join("");
-$("#plan").innerHTML = CONFIG.plans.map(p=>`<option value="${p.id}">${p.name} — ${p.price} €/mois</option>`).join("");
+$("#plan").innerHTML = CONFIG.plans.map(p=>`<option value="${p.id}">${p.name} — ${p.price} €/${p.unit||"mois"}</option>`).join("");
 function render(){
   document.querySelectorAll(".plan").forEach(el=>el.classList.toggle("sel",el.dataset.id===selPlan.id));
-  $("#plan").value=selPlan.id; $("#sPlan").textContent=selPlan.name; $("#sPay").textContent=selPay; $("#sTot").textContent=selPlan.price+" €";
+  $("#plan").value=selPlan.id; $("#sPlan").textContent=selPlan.name; $("#sPay").textContent=selPay; $("#sTot").textContent=selPlan.price+" €/"+(selPlan.unit||"mois");
 }
 document.querySelectorAll(".plan").forEach(el=>el.onclick=()=>{selPlan=CONFIG.plans.find(p=>p.id===el.dataset.id);render();$("#abonnement").scrollIntoView();});
 $("#plan").onchange=e=>{selPlan=CONFIG.plans.find(p=>p.id===e.target.value);render();};
 $("#pay").onclick=e=>{const b=e.target.closest("button");if(!b)return;document.querySelectorAll("#pay button").forEach(x=>x.classList.toggle("on",x===b));selPay=b.dataset.v;render();};
 $("#form").onsubmit=e=>{e.preventDefault();
-  window.open(wa(`[DÉMO Adrian Laser]\nPrénom : ${$("#name").value.trim()}\nFormule : ${selPlan.name} (${selPlan.price} €/mois)\nPaiement : ${selPay}`),"_blank");};
+  window.open(wa(`[DÉMO Adrian Laser]\nPrénom : ${$("#name").value.trim()}\nFormule : ${selPlan.name} (${selPlan.price} €/${selPlan.unit||"mois"})\nPaiement : ${selPay}`),"_blank");};
 $("#phone").textContent=CONFIG.phoneDisplay; $("#y").textContent=new Date().getFullYear(); render();
 
 // Animations au scroll + compteurs
