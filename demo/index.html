@@ -78,7 +78,7 @@
     <h1 class="in d2">12 mois<br>de <em>bonheur.</em></h1>
     <p class="lead in d3">Un seul abonnement. Tout inclus. Rien d'autre à penser pendant un an.</p>
 
-    <div class="price in d4"><b>99&nbsp;€</b><small>/ an · soit 8,25 € / mois</small></div>
+    <div class="price in d4"><b>59&nbsp;€</b><small>/ an · soit 4,92 € / mois</small></div>
 
     <form id="form" class="in d5">
       <input id="name" required placeholder="Votre prénom" aria-label="Votre prénom">
@@ -100,7 +100,7 @@ const WHATSAPP = "33600000000"; // numéro fictif
 const wa = m => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(m)}`;
 document.getElementById("form").onsubmit = e => {
   e.preventDefault();
-  window.open(wa(`[DÉMO Adrian Laser]\nPrénom : ${document.getElementById("name").value.trim()}\nAbonnement : 12 mois — 99 €`), "_blank");
+  window.open(wa(`[DÉMO Adrian Laser]\nPrénom : ${document.getElementById("name").value.trim()}\nAbonnement : 12 mois — 59 €`), "_blank");
 };
 document.getElementById("contact").href = wa("[DÉMO Adrian Laser] Bonjour !");
 document.getElementById("y").textContent = new Date().getFullYear();
