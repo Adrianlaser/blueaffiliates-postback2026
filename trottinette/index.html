@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adrian Laser — App trottinette</title>
+<meta name="description" content="L'application pour votre trottinette électrique : batterie, trajets, GPS, antivol et diagnostic. Abonnement 12 mois.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#07080d;--card:#0e1020;--txt:#f2f3f8;--mut:#7d8197;--line:#ffffff12;--a:#22d3ee;--b:#a855f7;--ok:#22c55e;--wa:#25d366;
+        --grad:linear-gradient(90deg,var(--a),#3b82f6,var(--b))}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 20px}
+
+  .glow{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,#3b82f62e,transparent 65%);
+        top:-300px;left:50%;transform:translateX(-50%);z-index:-1;animation:breathe 8s ease-in-out infinite}
+  @keyframes breathe{50%{transform:translateX(-50%) scale(1.15);opacity:.7}}
+
+  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:#07080dcc;border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;justify-content:space-between;align-items:center;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+  .logo svg{width:30px;height:30px}
+  .logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  nav{display:flex;gap:26px;font-size:14px;color:var(--mut)}
+  nav a:hover{color:var(--txt)}
+  @media(max-width:720px){nav{display:none}}
+  .pill{padding:10px 18px;border-radius:999px;background:var(--wa);color:#04210f;font-weight:700;font-size:13px}
+
+  /* Hero */
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:70px 0 60px}
+  @media(max-width:860px){.hero{grid-template-columns:1fr;text-align:center;padding-top:40px}.hero .cta{justify-content:center}}
+  .eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mut)}
+  h1{font-size:clamp(42px,7vw,76px);font-weight:900;line-height:1.02;letter-spacing:-.04em;margin:18px 0}
+  h1 em{font-style:normal;background:var(--grad);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+  @keyframes shine{to{background-position:200% center}}
+  .lead{color:var(--mut);font-size:18px;max-width:480px}
+  @media(max-width:860px){.lead{margin:0 auto}}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 24px;border-radius:999px;font-weight:700;font-size:15px;border:0;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-wa{background:var(--wa);color:#04210f;box-shadow:0 10px 30px #25d36640}
+  .btn-ghost{background:#ffffff0a;border:1px solid var(--line);color:var(--txt)}
+
+  /* Téléphone */
+  .phone{width:280px;height:560px;margin:0 auto;border-radius:44px;background:#000;border:10px solid #1a1c2b;position:relative;overflow:hidden;
+         box-shadow:0 40px 80px #000a,0 0 0 1px #ffffff1a,0 0 80px #3b82f633;animation:hover 6s ease-in-out infinite}
+  @keyframes hover{50%{transform:translateY(-12px)}}
+  .scr{position:absolute;inset:0;background:linear-gradient(180deg,#0b0e1c,#07080d);padding:34px 18px 18px;display:flex;flex-direction:column;gap:12px}
+  .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:90px;height:22px;border-radius:12px;background:#000;z-index:2}
+  .scr h4{font-size:13px;color:var(--mut);font-weight:500}
+  .scr h4 b{display:block;color:var(--txt);font-size:17px}
+  .bat{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+  .ring{width:70px;height:70px;flex:none}
+  .ring circle{fill:none;stroke-width:7}
+  .ring .t{stroke:#ffffff14}
+  .ring .v{stroke:url(#bg);stroke-linecap:round;stroke-dasharray:188.5;stroke-dashoffset:188.5;transform:rotate(-90deg);transform-origin:50% 50%;animation:fill 2.2s .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes fill{to{stroke-dashoffset:41.5}}
+  .bat p{font-size:12px;color:var(--mut)}
+  .bat p b{display:block;font-size:24px;color:var(--txt)}
+  .map{flex:1;border-radius:18px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;
+       background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:22px 22px}
+  .map svg{position:absolute;inset:0;width:100%;height:100%}
+  .route{fill:none;stroke:url(#rg);stroke-width:4;stroke-linecap:round;stroke-dasharray:400;stroke-dashoffset:400;animation:draw 3s 1s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .dot{fill:var(--a);filter:drop-shadow(0 0 6px var(--a))}
+  .tags{display:flex;gap:8px}
+  .tag{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;font-size:11px;color:var(--mut)}
+  .tag b{display:block;color:var(--txt);font-size:14px}
+  .lock{color:var(--ok)!important}
+
+  section{padding:70px 0}
+  h2{font-size:clamp(28px,4.5vw,42px);font-weight:900;letter-spacing:-.03em}
+  .center{text-align:center}
+  .sub{color:var(--mut);margin-top:8px}
+
+  .feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:40px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;transition:transform .3s,border-color .3s}
+  .feat:hover{transform:translateY(-6px);border-color:#3b82f688}
+  .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#22d3ee14;margin-bottom:14px}
+  .ic svg{width:22px;height:22px;stroke:var(--a);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .feat h3{font-size:16px;margin-bottom:6px}
+  .feat p{font-size:14px;color:var(--mut)}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px;counter-reset:s}
+  @media(max-width:720px){.steps{grid-template-columns:1fr}}
+  .step{border-top:2px solid var(--line);padding-top:18px;counter-increment:s}
+  .step::before{content:counter(s,decimal-leading-zero);font-weight:900;font-size:13px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .step h3{font-size:17px;margin:6px 0}
+  .step p{font-size:14px;color:var(--mut)}
+
+  /* Offre */
+  .offer{max-width:520px;margin:40px auto 0;background:linear-gradient(160deg,#101536,#140d2c);border:1px solid #22d3ee55;border-radius:28px;padding:36px;
+         box-shadow:0 30px 80px #22d3ee14;text-align:left}
+  .offer .tag2{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:99px;background:var(--grad)}
+  .price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+  .price b{font-size:60px;font-weight:900;letter-spacing:-.03em}
+  .price small{color:var(--mut)}
+  .offer ul{list-style:none;margin:20px 0;color:var(--mut);font-size:15px}
+  .offer li{padding:8px 0;border-bottom:1px dashed var(--line)}
+  .offer li::before{content:"✓  ";color:var(--a);font-weight:700}
+  label{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:14px 0 6px}
+  input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#07080d99;color:var(--txt);font:inherit;outline:none;transition:border-color .2s}
+  input:focus{border-color:var(--a)}
+  .offer .btn-wa{width:100%;justify-content:center;margin-top:20px;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 #25d36699}70%{box-shadow:0 0 0 14px #25d36600}100%{box-shadow:0 0 0 0 #25d36600}}
+  .note{font-size:12px;color:var(--mut);margin-top:12px;text-align:center}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-top:12px;text-align:left}
+  summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  summary::after{content:"+";color:var(--a);font-size:20px;line-height:1;transition:transform .3s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--mut);margin-top:10px;font-size:15px}
+  .faq{max-width:720px;margin:30px auto 0}
+
+  footer{border-top:1px solid var(--line);padding:26px 0;font-size:13px;color:var(--mut);text-align:center}
+  footer a{text-decoration:underline}
+
+  .fab{position:fixed;right:18px;bottom:18px;z-index:30;width:58px;height:58px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 30px #25d36666;animation:pulse 2.4s infinite}
+  .fab svg{width:30px;height:30px;fill:#fff}
+
+  .in{opacity:0;transform:translateY(24px);animation:up .9s cubic-bezier(.2,.7,.2,1) forwards}
+  .d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}
+  @keyframes up{to{opacity:1;transform:none}}
+  .rv{opacity:0;transform:translateY(36px);transition:opacity .8s,transform .8s}
+  .rv.on{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.in,.rv{opacity:1;transform:none}.ring .v{stroke-dashoffset:41.5}.route{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<header>
+  <div class="wrap">
+    <a href="#" class="logo" aria-label="Adrian Laser">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs><rect x="2" y="2" width="44" height="44" rx="13" fill="url(#lg)"/><path d="M26 10l-10 16h8l-2 12 10-16h-8z" fill="#fff"/></svg>
+      Adrian <span>Laser</span>
+    </a>
+    <nav><a href="#fonctions">Fonctions</a><a href="#comment">Comment ça marche</a><a href="#offre">Offre</a><a href="#faq">FAQ</a></nav>
+    <a href="#offre" class="pill">S'abonner</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <p class="eyebrow in d1">Application trottinette électrique</p>
+      <h1 class="in d2">Votre trottinette,<br><em>sous contrôle.</em></h1>
+      <p class="lead in d3">Batterie, trajets, position GPS, antivol et diagnostic : tout dans une seule application, pendant 12 mois.</p>
+      <div class="cta in d4">
+        <a href="#offre" class="btn btn-wa">S'abonner — 70 € / an</a>
+        <a href="#fonctions" class="btn btn-ghost">Voir les fonctions</a>
+      </div>
+    </div>
+
+    <div class="in d3">
+      <div class="phone" aria-hidden="true">
+        <div class="notch"></div>
+        <div class="scr">
+          <h4>Bonjour 👋<b>Ma trottinette</b></h4>
+          <div class="bat">
+            <svg class="ring" viewBox="0 0 70 70"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#22c55e"/></linearGradient></defs><circle class="t" cx="35" cy="35" r="30"/><circle class="v" cx="35" cy="35" r="30"/></svg>
+            <p><b id="pct">0 %</b>Batterie · ~31 km restants</p>
+          </div>
+          <div class="map">
+            <svg viewBox="0 0 240 200" preserveAspectRatio="none"><defs><linearGradient id="rg"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+              <path class="route" d="M20 170 C60 150,50 110,95 100 S150 120,160 80 S200 40,220 30"/>
+              <circle class="dot" cx="220" cy="30" r="6"/></svg>
+          </div>
+          <div class="tags">
+            <div class="tag">Trajet<b>6,4 km</b></div>
+            <div class="tag">Antivol<b class="lock">Activé</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="fonctions" class="center">
+    <h2 class="rv">Tout ce qu'il faut, rien de plus.</h2>
+    <p class="sub rv">Compatible avec la plupart des trottinettes électriques Bluetooth.</p>
+    <div class="feats" style="text-align:left">
+      <div class="feat rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2M6 11v2M10 11v2"/></svg></div><h3>Batterie</h3><p>Niveau en temps réel, autonomie restante et alertes de charge.</p></div>
+      <div class="feat rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div><h3>Trajets</h3><p>Historique de vos sorties : distance, durée, vitesse moyenne.</p></div>
+      <div class="feat rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div><h3>GPS</h3><p>Retrouvez où vous l'avez garée, à tout moment.</p></div>
+      <div class="feat rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h3>Antivol</h3><p>Verrouillage à distance et alerte en cas de déplacement.</p></div>
+      <div class="feat rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></div><h3>Diagnostic</h3><p>Codes erreur expliqués, état des freins, moteur et pneus.</p></div>
+    </div>
+  </section>
+
+  <section id="comment" class="center">
+    <h2 class="rv">Prêt en 3 étapes</h2>
+    <div class="steps" style="text-align:left">
+      <div class="step rv"><h3>Abonnez-vous</h3><p>Commandez sur WhatsApp et réglez en toute simplicité.</p></div>
+      <div class="step rv"><h3>Installez l'app</h3><p>Recevez votre lien de téléchargement et votre code d'activation.</p></div>
+      <div class="step rv"><h3>Connectez la trottinette</h3><p>Appairage Bluetooth en quelques secondes, et c'est parti.</p></div>
+    </div>
+  </section>
+
+  <section id="offre" class="center">
+    <h2 class="rv">Une seule offre. 12 mois.</h2>
+    <p class="sub rv">Toutes les fonctions incluses, sans surprise.</p>
+    <div class="offer rv">
+      <span class="tag2">Abonnement annuel</span>
+      <div class="price"><b>70 €</b><small>/ 12 mois · soit 5,83 € / mois</small></div>
+      <ul>
+        <li>Batterie &amp; autonomie en temps réel</li>
+        <li>Historique des trajets illimité</li>
+        <li>Localisation GPS</li>
+        <li>Antivol &amp; alertes</li>
+        <li>Diagnostic complet</li>
+        <li>Mises à jour et support WhatsApp inclus</li>
+      </ul>
+      <form id="form">
+        <label for="name">Prénom</label>
+        <input id="name" required placeholder="Ex : Sarah">
+        <label for="model">Modèle de trottinette</label>
+        <input id="model" required placeholder="Ex : marque et modèle">
+        <button class="btn btn-wa" type="submit">Commander sur WhatsApp</button>
+      </form>
+      <p class="note">Contact WhatsApp : <b id="phone"></b></p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 class="center rv">Questions fréquentes</h2>
+    <div class="faq">
+      <details class="rv"><summary>Ma trottinette est-elle compatible ?</summary><p>Indiquez votre modèle lors de la commande : on vous confirme la compatibilité avant tout paiement.</p></details>
+      <details class="rv"><summary>Comment se passe le paiement ?</summary><p>Après votre message WhatsApp, vous recevez un lien de paiement sécurisé.</p></details>
+      <details class="rv"><summary>Que se passe-t-il après 12 mois ?</summary><p>L'abonnement ne se renouvelle pas automatiquement : vous choisissez de le prolonger ou non.</p></details>
+      <details class="rv"><summary>L'application modifie-t-elle la vitesse ?</summary><p>Non. L'application sert au suivi, à la sécurité et au diagnostic ; elle respecte la limite légale de 25 km/h.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="y"></span> Adrian Laser · <a href="#">Mentions légales</a> · <a href="#">CGV</a> · <a href="#">Confidentialité</a></footer>
+
+<a class="fab" id="fab" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp">
+  <svg viewBox="0 0 32 32"><path d="M16 3C9 3 3.3 8.6 3.3 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.7-5.7 12.7-12.7S23 3 16 3zm7.4 18c-.3.9-1.8 1.7-2.5 1.8-.6.1-1.5.1-2.4-.2-.6-.2-1.3-.4-2.2-.8-3.9-1.7-6.4-5.6-6.6-5.8-.2-.3-1.6-2.1-1.6-4s1-2.9 1.4-3.3c.3-.4.7-.5 1-.5h.7c.2 0 .5-.1.8.6.3.7 1 2.5 1.1 2.7.1.2.1.4 0 .6-.1.2-.2.4-.4.6l-.6.7c-.2.2-.4.4-.2.8.2.4 1 1.7 2.2 2.7 1.5 1.3 2.7 1.7 3.1 1.9.4.2.6.2.8-.1.2-.3 1-1.1 1.2-1.5.3-.4.5-.3.9-.2.4.1 2.3 1.1 2.7 1.3.4.2.7.3.8.4.1.3.1 1.1-.2 2z"/></svg>
+</a>
+
+<script>
+const CONFIG = { whatsapp:"33780954694", phoneDisplay:"07 80 95 46 94", price:"70 €" };
+const $ = s => document.querySelector(s);
+const wa = m => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(m)}`;
+
+$("#form").onsubmit = e => {
+  e.preventDefault();
+  window.open(wa(`Bonjour 👋\nJe souhaite l'abonnement 12 mois à l'application trottinette (${CONFIG.price}).\n\n• Prénom : ${$("#name").value.trim()}\n• Trottinette : ${$("#model").value.trim()}`), "_blank");
+};
+$("#phone").textContent = CONFIG.phoneDisplay;
+$("#fab").href = wa("Bonjour, j'ai une question sur l'application trottinette.");
+$("#y").textContent = new Date().getFullYear();
+
+// Compteur batterie
+setTimeout(() => { const t0 = performance.now(), el = $("#pct");
+  (function s(t){ const k = Math.min((t - t0) / 2200, 1); el.textContent = Math.round(78 * (1 - Math.pow(1 - k, 3))) + " %"; if (k < 1) requestAnimationFrame(s); })(t0);
+}, 600);
+
+// Apparition au scroll
+const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add("on"); io.unobserve(en.target); } }), { threshold: .15 });
+document.querySelectorAll(".rv").forEach(el => io.observe(el));
+</script>
+</body>
+</html>
